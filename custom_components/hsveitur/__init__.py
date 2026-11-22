@@ -22,6 +22,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: HsVeiturConfigEntry) -> 
     )
     coordinator = HsVeiturCoordinator(hass, entry, client)
     entry.runtime_data = coordinator
+    # Rates are options: reload so the new rate is picked up on the next import.
+    entry.async_on_unload(entry.add_update_listener(_async_reload))
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     # API calls take minutes; do not block startup or the config flow on them.
     entry.async_create_background_task(
@@ -32,3 +34,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: HsVeiturConfigEntry) -> 
 
 async def async_unload_entry(hass: HomeAssistant, entry: HsVeiturConfigEntry) -> bool:
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+
+async def _async_reload(hass: HomeAssistant, entry: HsVeiturConfigEntry) -> None:
+    await hass.config_entries.async_reload(entry.entry_id)

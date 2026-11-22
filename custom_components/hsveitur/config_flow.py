@@ -7,13 +7,22 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import voluptuous as vol
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
+from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import AuthError, HsVeiturClient, HsVeiturError
 from .const import (
     CONF_BACKFILL_MONTHS,
     CONF_CUSTOMER_ID,
+    CONF_ENERGY_RATE,
+    CONF_GRID_RATE,
+    CONF_INCLUDE_VAT,
     CONF_PRIVATE_KEY,
     CONF_PUBLIC_KEY,
     DEFAULT_BACKFILL_MONTHS,
@@ -33,10 +42,38 @@ STEP_USER = vol.Schema(
 STEP_REAUTH = vol.Schema(
     {vol.Required(CONF_PUBLIC_KEY): str, vol.Required(CONF_PRIVATE_KEY): str}
 )
+STEP_OPTIONS = vol.Schema(
+    {
+        vol.Optional(CONF_GRID_RATE): vol.All(vol.Coerce(float), vol.Range(min=0)),
+        vol.Optional(CONF_ENERGY_RATE): vol.All(vol.Coerce(float), vol.Range(min=0)),
+        vol.Required(CONF_INCLUDE_VAT, default=True): bool,
+    }
+)
+
+
+class HsVeiturOptionsFlow(OptionsFlow):
+    """Custom pricing. Leave both rates empty to turn cost tracking off."""
+
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(data=user_input)
+        return self.async_show_form(
+            step_id="init",
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_OPTIONS, self.config_entry.options
+            ),
+        )
 
 
 class HsVeiturConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> HsVeiturOptionsFlow:
+        return HsVeiturOptionsFlow()
 
     async def _validate(self, data: Mapping[str, Any]) -> str | None:
         """Make one narrow call (slow: up to a few minutes). Return an error key."""

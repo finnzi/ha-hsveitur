@@ -23,6 +23,10 @@ from .api import AuthError, HsVeiturClient, HsVeiturError, Reading
 from .const import (
     CHUNK_DELAY_SECONDS,
     CONF_BACKFILL_MONTHS,
+    CONF_ENERGY_RATE,
+    CONF_GRID_RATE,
+    CONF_INCLUDE_VAT,
+    CURRENCY,
     DEFAULT_BACKFILL_MONTHS,
     DOMAIN,
     MAX_CHUNK,
@@ -30,7 +34,14 @@ from .const import (
     STATISTICS_SOURCE,
     UPDATE_INTERVAL,
 )
-from .statistics import build_hourly_stats, initial_baseline
+from .statistics import (
+    RateSegment,
+    build_cost_stats,
+    build_hourly_stats,
+    effective_rate,
+    initial_baseline,
+    with_rate,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -125,6 +136,51 @@ class HsVeiturCoordinator(DataUpdateCoordinator[dict[str, Reading]]):
                 ),
                 [StatisticData(start=s.start, state=s.state, sum=s.sum) for s in stats],
             )
+            self._import_cost(meter_id, name, automatic, stats)
+
+    def _rate(self) -> float | None:
+        opts = self.config_entry.options
+        return effective_rate(
+            opts.get(CONF_GRID_RATE),
+            opts.get(CONF_ENERGY_RATE),
+            opts.get(CONF_INCLUDE_VAT, True),
+        )
+
+    def _import_cost(
+        self, meter_id: str, name: str, automatic: list[Reading], stats: list
+    ) -> None:
+        """Import a cumulative ISK statistic priced from the user's own rates."""
+        assert self._state is not None
+        rate = self._rate()
+        if rate is None:
+            return
+        cost = self._state.setdefault("cost", {}).setdefault(
+            meter_id, {"segments": [], "last_index": None}
+        )
+        segments = [RateSegment(*seg) for seg in cost["segments"]]
+        # A new rate applies from the newest index already priced onwards.
+        at_index = cost["last_index"]
+        if at_index is None:
+            at_index = initial_baseline(automatic[0])
+        segments = with_rate(segments, rate, at_index)
+        cost["segments"] = [[seg.from_index, seg.rate] for seg in segments]
+        cost["last_index"] = max(at_index, stats[-1].state)
+        async_add_external_statistics(
+            self.hass,
+            StatisticMetaData(
+                has_sum=True,
+                mean_type=StatisticMeanType.NONE,
+                name=f"HS Veitur {name} cost",
+                source=STATISTICS_SOURCE,
+                statistic_id=f"{STATISTICS_SOURCE}:cost_{meter_id}",
+                unit_class=None,
+                unit_of_measurement=CURRENCY,
+            ),
+            [
+                StatisticData(start=c.start, state=c.sum, sum=c.sum)
+                for c in build_cost_stats(stats, segments)
+            ],
+        )
 
 
 def _by_meter(readings: list[Reading]) -> dict[str, list[Reading]]:
