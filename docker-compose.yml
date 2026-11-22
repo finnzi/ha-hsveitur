@@ -1,0 +1,30 @@
+# Dev stack. Start HA:   docker compose up -d      (http://localhost:8123)
+# Run tests:             docker compose run --rm tests
+services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: ha-hsveitur-dev
+    restart: unless-stopped
+    ports:
+      - "8123:8123"
+    environment:
+      TZ: Atlantic/Reykjavik
+    volumes:
+      # Runtime state (users, db, logs) lives in ./dev/config and is git-ignored.
+      - ./dev/config:/config:z
+      # Integration under development, live-mounted: restart HA to pick up changes.
+      - ./custom_components/hsveitur:/config/custom_components/hsveitur:z
+
+  tests:
+    profiles: ["test"]
+    image: python:3.14
+    working_dir: /repo
+    volumes:
+      - .:/repo:z
+    environment:
+      # The container runs as root: don't leave root-owned files in the repo.
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTEST_ADDOPTS: "-p no:cacheprovider"
+      PIP_NO_CACHE_DIR: "1"
+    command: >
+      bash -c "pip install -q -r requirements-test.txt && pytest -q"

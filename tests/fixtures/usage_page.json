@@ -1,0 +1,8 @@
+{
+  "Info": {"TotalNoRows": 3, "NextPage": ""},
+  "UsageData": [
+    {"date": "2026-11-20 00:00:00", "customer_id": "0000000000", "delivery_point_name": "Example 1, ", "delivery_point_id": "1", "unitcode": "kWh", "type": "A+", "delta_value": 0.77, "index_value": 50049.17, "temperature": null, "type_data": "Rafmagn", "contract_id": "1", "meter_id": "7021613", "data_source": "Sjálfvirkar mælingar"},
+    {"date": "2026-11-20 01:00:00", "customer_id": "0000000000", "delivery_point_name": "Example 1, ", "delivery_point_id": "1", "unitcode": "kWh", "type": "A+", "delta_value": 0.62, "index_value": 50049.79, "temperature": null, "type_data": "Rafmagn", "contract_id": "1", "meter_id": "7021613", "data_source": "Sjálfvirkar mælingar"},
+    {"date": "2026-11-20 02:00:00", "customer_id": "0000000000", "delivery_point_name": "Example 1, ", "delivery_point_id": "1", "unitcode": "kWh", "type": "A+", "delta_value": 0.59, "index_value": 50050.38, "temperature": null, "type_data": "Rafmagn", "contract_id": "1", "meter_id": "7021613", "data_source": "Handvirk aflestur"}
+  ]
+}
