@@ -18,3 +18,15 @@ Reset everything: `docker compose down && rm -rf dev/config/{.storage,*.db*,*.lo
     docker compose run --rm tests   # Python 3.14 + pytest-homeassistant-custom-component
 
 HA-free tests also run locally: `.venv/bin/pytest`.
+
+## Releasing
+
+HACS shows the latest GitHub release as the installed version (without one it shows a
+commit hash). Releases are created by `.github/workflows/release.yml`:
+
+1. Bump `version` in `custom_components/hsveitur/manifest.json` (and the version in the
+   README status note) on a branch, PR it into `dev`, then merge `dev` into `main`.
+2. Tag the merge commit on `main` and push the tag:
+   `git tag v0.2.0 && git push origin v0.2.0`
+3. The workflow fails if the tag doesn't match the manifest version; otherwise it creates
+   the release with generated notes.
