@@ -27,5 +27,18 @@
       "already_configured": "This customer ID is already configured.",
       "reauth_successful": "Re-authentication was successful."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom pricing",
+        "description": "Enter your own prices per kWh, excluding VAT, to get a cost statistic (hsveitur:cost_<meter>) for the Energy dashboard. Check your bills: the grid rate is HS Veitur's distribution + transmission + equalization per kWh; the energy rate is from your electricity retailer. Leave both empty to turn cost tracking off. A changed rate applies from the newest data onwards; history already priced is not changed.",
+        "data": {
+          "grid_rate": "Grid rate, ISK/kWh excl. VAT",
+          "energy_rate": "Energy rate, ISK/kWh excl. VAT",
+          "include_vat": "Include 24% VAT in the cost"
+        }
+      }
+    }
   }
 }

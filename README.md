@@ -33,6 +33,27 @@ the **Energy dashboard**.
 - Creates one device per meter with a `total_increasing` kWh sensor holding the latest
   meter reading.
 - Re-authentication flow if the keys stop working.
+- Optional **cost tracking** with your own prices (see below).
+
+## Cost tracking (custom pricing)
+
+HS Veitur's API has no prices, and HS Veitur only transports the electricity; the
+energy itself is billed by your retailer. So you enter your own rates: open the
+integration's **Configure** dialog and set, in ISK per kWh **excluding VAT**:
+
+- **Grid rate**: on your HS Veitur bill, distribution + transmission + equalization
+  (*orkugjald dreifingar* + *flutningur* + *jöfnunargjald*) added together.
+- **Energy rate**: the per-kWh price on your retailer's bill.
+- **Include VAT**: adds 24% (on by default).
+
+Either rate can be left empty; leave both empty to keep cost tracking off. This adds a
+cumulative `hsveitur:cost_<meter_id>` statistic (ISK) that you can pick as the cost
+statistic in the Energy dashboard's grid consumption settings.
+
+Notes: fixed monthly fees are not included, only per-kWh charges. Rates are fixed
+values, so spot-price tariffs are not supported. When you change a rate it applies from
+the newest data onwards; hours already priced keep their old rate. Cost starts when you
+first set a rate and is not back-filled for earlier history.
 
 ## Requirements
 
