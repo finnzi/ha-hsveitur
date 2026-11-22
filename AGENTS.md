@@ -23,8 +23,27 @@ hand-written or fully human-reviewed.
 4. **Don't hammer the live API.** Every successful call takes 40-200 s. Use the live API
    only when needed, one narrow range, large `page_size` (small pages multiply the cost
    since each page is a separate slow call). Run long calls in the background.
-5. Don't push, open PRs, or change repo visibility unless asked. The repo is public.
-   Commit messages end with the co-author line the harness specifies.
+5. Don't push, open PRs, merge, tag, release, or change repo visibility/settings unless
+   asked. The repo is public. Commit messages end with the co-author line the harness
+   specifies.
+
+## Branching and releases
+
+- `main` is what users install via HACS; `dev` is the integration branch. Both are
+  long-lived and `dev` is protected against deletion and force-push. **Never commit or
+  push directly to `main` or `dev`.**
+- Work on a short-lived branch off `dev`: `git checkout dev && git pull && git checkout -b
+  <topic>`. Open the PR **into `dev`** (not `main`). GitHub auto-deletes the branch when
+  its PR merges; delete the local copy with `git branch -d <topic>`.
+- Shipping is a separate step the maintainer decides on: a `dev` -> `main` PR. Afterwards
+  sync `main` back into `dev` (`git checkout dev && git merge main && git push`) so
+  they don't drift apart.
+- Releases: HACS shows the latest GitHub release as the version (otherwise a commit hash).
+  To release, bump `version` in `custom_components/hsveitur/manifest.json` (and the
+  version in the README status note) via the normal branch -> `dev` -> `main` flow, then
+  tag `main` and push the tag (`git tag vX.Y.Z && git push origin vX.Y.Z`).
+  `.github/workflows/release.yml` fails if the tag and manifest version differ, and
+  otherwise creates the release. Details in `docs/development.md`.
 
 ## Layout
 
