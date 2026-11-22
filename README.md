@@ -17,7 +17,7 @@ the **Energy dashboard**.
 > line. It has had limited human review. Read the code before trusting it with your
 > credentials, and expect rough edges. Issues and pull requests are welcome.
 >
-> **Status: early / experimental (v0.1.0).** The API client and statistics logic are
+> **Status: early / experimental (v0.1.1).** The API client and statistics logic are
 > tested, including a live call against the real API. The Home Assistant side (config
 > flow, coordinator, sensor, statistics import) is written but has not yet been
 > verified end to end in a running instance. Unofficial; not affiliated with HS Veitur.
