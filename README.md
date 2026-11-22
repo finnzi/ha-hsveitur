@@ -4,6 +4,14 @@ A [HACS](https://hacs.xyz) custom integration that reads electricity usage from
 [HS Veitur](https://www.hsveitur.is) (Iceland) into Home Assistant, including
 the **Energy dashboard**.
 
+> **Not affiliated with HS Veitur.** This is an independent, community-made project. It is
+> **not** created, endorsed, sponsored, supported or approved by HS Veitur hf. in any way,
+> and has no official connection to the company. "HS Veitur" and its logo are trademarks of
+> their respective owner; the name and logo are used here only to identify the service this
+> integration connects to. It uses HS Veitur's public customer API with your own
+> credentials. For help with your account or the API itself, contact HS Veitur, not this
+> project.
+
 > **Vibe-coded with AI.** This integration was built mostly by an AI coding assistant
 > (Claude Code) working from the human maintainer's direction, not hand-written line by
 > line. It has had limited human review. Read the code before trusting it with your
@@ -31,6 +39,8 @@ the **Energy dashboard**.
 - HS Veitur API credentials: a **public key**, a **private key**, and your **customer ID
   (kennitala)**. See [Getting API credentials](#getting-api-credentials).
 - Home Assistant with the recorder enabled (default).
+- Home Assistant 2026.3 or newer to show the bundled HS Veitur icon (shipped in
+  `custom_components/hsveitur/brand/`). Older versions work but show a placeholder icon.
 
 ## Getting API credentials
 
