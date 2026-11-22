@@ -7,3 +7,10 @@
 __pycache__/
 *.pyc
 .venv/
+
+# Dev Home Assistant runtime state (keep only configuration.yaml)
+dev/config/*
+!dev/config/configuration.yaml
+.cache/
+.pytest_cache/
+.ruff_cache/

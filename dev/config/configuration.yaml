@@ -1,0 +1,11 @@
+# Dev Home Assistant configuration (the integration itself is added via the UI).
+default_config:
+
+logger:
+  default: warning
+  logs:
+    custom_components.hsveitur: debug
+
+homeassistant:
+  time_zone: Atlantic/Reykjavik
+  unit_system: metric

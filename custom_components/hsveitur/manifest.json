@@ -1,12 +1,12 @@
 {
   "domain": "hsveitur",
   "name": "HS Veitur",
-  "codeowners": [],
+  "codeowners": ["@finnzi"],
   "config_flow": true,
   "dependencies": ["recorder"],
-  "documentation": "https://github.com/OWNER/ha-hsveitur",
+  "documentation": "https://github.com/finnzi/ha-hsveitur",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/OWNER/ha-hsveitur/issues",
+  "issue_tracker": "https://github.com/finnzi/ha-hsveitur/issues",
   "requirements": [],
   "version": "0.1.0"
 }
