@@ -1,0 +1,31 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HS Veitur",
+        "description": "Enter the API keys issued by HS Veitur and your customer ID (kennitala). Validation calls the API, which can take a few minutes.",
+        "data": {
+          "public_key": "Public key",
+          "private_key": "Private key",
+          "customer_id": "Customer ID (kennitala)",
+          "backfill_months": "Months of history to import"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-enter API keys",
+        "data": {
+          "public_key": "Public key",
+          "private_key": "Private key"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "HS Veitur rejected the keys or customer ID.",
+      "cannot_connect": "Could not reach HS Veitur (it can be slow; try again)."
+    },
+    "abort": {
+      "already_configured": "This customer ID is already configured.",
+      "reauth_successful": "Re-authentication was successful."
+    }
+  }
+}
