@@ -22,6 +22,9 @@ services:
     volumes:
       - .:/repo:z
     environment:
-      PIP_CACHE_DIR: /repo/.cache/pip
+      # The container runs as root: don't leave root-owned files in the repo.
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTEST_ADDOPTS: "-p no:cacheprovider"
+      PIP_NO_CACHE_DIR: "1"
     command: >
       bash -c "pip install -q -r requirements-test.txt && pytest -q"
