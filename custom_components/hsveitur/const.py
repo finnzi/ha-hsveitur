@@ -8,6 +8,13 @@ CONF_PUBLIC_KEY = "public_key"
 CONF_PRIVATE_KEY = "private_key"
 CONF_CUSTOMER_ID = "customer_id"
 CONF_BACKFILL_MONTHS = "backfill_months"
+# Options (cost tracking). Rates are ISK per kWh excluding VAT.
+CONF_GRID_RATE = "grid_rate"
+CONF_ENERGY_RATE = "energy_rate"
+CONF_INCLUDE_VAT = "include_vat"
+
+VAT_RATE = 0.24
+CURRENCY = "ISK"
 
 DEFAULT_BACKFILL_MONTHS = 12
 UPDATE_INTERVAL = timedelta(hours=6)
