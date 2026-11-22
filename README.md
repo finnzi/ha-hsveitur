@@ -31,6 +31,8 @@ the **Energy dashboard**.
 - HS Veitur API credentials: a **public key**, a **private key**, and your **customer ID
   (kennitala)**. See [Getting API credentials](#getting-api-credentials).
 - Home Assistant with the recorder enabled (default).
+- Home Assistant 2026.3 or newer to show the bundled HS Veitur icon (shipped in
+  `custom_components/hsveitur/brand/`). Older versions work but show a placeholder icon.
 
 ## Getting API credentials
 
